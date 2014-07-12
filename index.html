@@ -1,0 +1,599 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Lucky Satoshi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="New Bitcoin Lottery Site! Win 1 KNC Titan Miner First Batch 400 Mh/s with 0.05 BTC!!!">
+    <meta name="keywords" content="BTC, bitcoin, satoshi, raffle, btc lottery, cryptocurrency, KNC, miner, prize, winner, hash, KNC titan first batch, luckysatoshi, blockchain ">
+    <meta name="author" content="The Lucky Satoshi Team">
+    <link rel="canonical" href="http://luckysatoshi.org/">
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link href='http://fonts.googleapis.com/css?family=Underdog' rel='stylesheet' type='text/css'>
+
+    <meta property="og:image" content="/luckyS.png" />
+    <meta property="og:title" content="LuckySatoshi" />
+    <meta property="og:description" content="Lucky Satoshi is a new lottery service, currently drawing for a KNC Titan Miner (400Mh/s). The ticket drawing is based on the Bitcoin blockchain and anybody can verify the result." />
+   
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    <style type="text/css">
+
+    * {
+      font-family: 'Underdog', cursive;
+    }
+
+    html {
+      position: relative;
+      min-height: 100%;
+      overflow-y: scroll;
+    }
+    body {
+      /* Margin bottom by footer height */
+      margin-bottom: 60px;
+      color: #26333a;
+    }
+    .page-header a,
+    .page-header a:link,
+    .page-header a:visited,
+    .page-header a:active,
+    .page-header a:hover {
+      color: #26333a;
+      text-decoration: none;
+    }
+    a, a:link, a:visited, a:active, a:hover {
+      color: #5cb85c;
+    }
+    .logo {
+      color: #5cb85c;
+    }
+    .simplified {
+      display: none!important;
+      visibility: hidden!important;
+    }
+    #raffle {
+      margin: 20px 0;
+    }
+    #raffle .header {
+      padding-bottom: 1em;
+    }
+    #spinner {
+      padding: 20px 0;
+    }
+    #buy-ticket {
+      margin-bottom: 50px;
+    }
+    #qrcode {
+      margin-bottom: 20px;
+    }
+    #qrcode canvas {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #how-it-works {
+      margin: 60px 0;
+    }
+    .btn-create {
+      color: #fff;
+      background-color: #5cb85c;
+      border-color: #4cae4c;
+    }
+    #footer {
+      position: relative;
+      bottom: 0;
+      width: 100%;
+      max-width: 960px;
+      border-radius: 5px;
+      /* Set the fixed height of the footer here */
+      height: auto;
+      background-color: #f5f5f5;
+    }
+    .container {
+      width: auto;
+      max-width: 960px;
+      padding: 0 15px;
+    }
+    .container .text-muted {
+      margin: 5px 0;
+    }
+
+    #toggleWrapper {
+      text-align: justify;
+
+    }
+
+    #displayDetailedButton {
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 5px;
+  -webkit-box-shadow: 2px 2px 2px #666666;
+  -moz-box-shadow: 2px 2px 2px #666666;
+  box-shadow: 2px 2px 2px #666666;
+  font-family: Arial;
+  color: #572f04;
+  font-size: 14px;
+  background: #f2f2ef;
+  padding: 5px 10px 5px 10px;
+  border: solid #1f628d 1px;
+  text-decoration: none;
+    }
+  </style>
+
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries fffdcf-->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+  <script src="jquery.qrcode.min.js"></script>
+
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+  <script src="sjcl.js"></script>
+
+  <script src="bitraffle.js"></script>
+
+  <script>
+    $(document).ready(function(){
+
+
+      $('a').click(function(){
+        var target = $(this).attr('rel');
+        $("#"+target).slideDown('slow').siblings("div").slideUp('slow');
+      })
+
+      $("#displayDetailedButton").click(function(){
+        // TODO: check if its up
+        if ($("#tickets-bought").css('display') != 'block'){
+          $("#tickets-bought").slideDown('slow');
+        } else {
+          $("#tickets-bought").slideUp('slow');
+        }
+
+      })
+
+      // When form submitted, encode data and redirect
+      $("#create-raffle").submit(function( event ) {
+        event.preventDefault();
+
+        var data = encodeData("317390", "1DyzUMMYmUjhYy6dTGVYgcu2swcjSzAJ5C", $("#ticket").val(), $("#gift").val());
+
+        window.location.href = "?" + $.param({title: $("#title").val()}) + "&data=" + data;
+      });
+
+      var urlParams = {title:"LuckySatoshi",data:"eyJibG9jayI6IjMxNzM5MCIsImFkZHJlc3MiOiIxRHl6VU1NWW1VamhZeTZkVEdWWWdjdTJzd2NqU3pBSjVDIiwidGlja2V0IjoiMC4wNSIsImdpZnQiOiI1In0="};
+
+      var title = urlParams.title;
+
+      if (urlParams.simple) {
+        $("#tickets-bought").addClass("simplified");
+      }
+
+      var data = decodeData(urlParams);
+
+      var block = Number(data.block);
+      var address = data.address;
+      var ticketBtc = Number(data.ticket);
+      var giftEvery = Number(data.gift);
+      giftEvery = isNaN(giftEvery) ? 0 : giftEvery;
+
+      if (title !== undefined && title !== "" &&
+          block !== undefined && !isNaN(block) && block >= 0 &&
+          address !== undefined && address !== "" &&
+          ticketBtc !== undefined && !isNaN(ticketBtc) && ticketBtc > 0) {
+
+        $("#raffle .title").text(title);
+        $("#raffle").removeClass("hidden");
+        $(".target-block").text(block);
+
+        runRaffle(block, address, ticketBtc, giftEvery, title);
+      }
+    });
+
+    function decodeData(urlParams) {
+      var utf8String = sjcl.codec.utf8String;
+      var base64 = sjcl.codec.base64;
+
+      try{
+        return JSON.parse(utf8String.fromBits(base64.toBits(urlParams.data)))
+      }catch(e){
+        // Don't care for error
+        return urlParams;
+      }
+    }
+
+    function encodeData(block, address, ticket, gift) {
+      var utf8String = sjcl.codec.utf8String;
+      var base64 = sjcl.codec.base64;
+
+      var data = {block: block, address: address, ticket: ticket, gift: gift};
+      return base64.fromBits(utf8String.toBits(JSON.stringify(data)));
+    }
+
+    function showWinner(txHash, ticketHash) {
+      $(".winner-found").removeClass("hidden");
+      $(".calculating-winner").addClass("hidden");
+      $(".winning-tx").text(txHash);
+      $(".winning-ticket").text(ticketHash);
+      if (txHash !== "none") {
+        $("#tickets-bought").removeClass("simplified");
+      }
+    }
+
+
+    function showPayment(address, ticketBtc, giftEvery, title) {
+      $("#spinner").addClass("hidden");
+      $("#buy-ticket").removeClass("hidden");
+      $(".payment-address").text(address);
+      $("#ticket-price").text(ticketBtc);
+
+      if (giftEvery > 0) {
+        $("#gift-tickets").removeClass("hidden");
+        $("#gift-tickets-every").text(giftEvery);
+      }
+
+      var updatePayment = getUpdatePayment(address, ticketBtc, giftEvery, title);
+      $("#tickets").change(updatePayment);
+      updatePayment();
+    }
+
+    function showError(message) {
+      $("#spinner").addClass("hidden");
+      $("#winner").addClass("hidden");
+      $("#error-box").removeClass("hidden");
+      $("#error-box p").text(message);
+    }
+
+
+    function getUpdatePayment(address, ticketBtc, giftEvery, title) {
+      return function() {
+        var numOfTickets = Number($("#tickets").val());
+        if (numOfTickets < 1) {
+          numOfTickets = 1;
+        }
+
+        var ticketsToPay = numOfTickets;
+        var gift = 0;
+
+        if (giftEvery > 0) {
+          gift = Math.floor(numOfTickets / giftEvery);
+        }
+
+        var message = ticketsToPay === 1 ? "1 ticket" : ticketsToPay + " tickets";
+        if (gift > 0) {
+          message += " + " + gift + " free";
+        }
+
+        var totalAmount = ticketBtc * ticketsToPay;
+        totalAmount = Math.round(totalAmount * 1e8) / 1e8; // avoids strange float point arithmetic errors
+        var paymentLink = "bitcoin:"+address+
+            "?amount="+totalAmount+
+            "&label="+encodeURIComponent(title)+
+            "&message="+encodeURIComponent(message);
+        $("#payment-link").attr("href", paymentLink);
+        $("#total-amount").text(totalAmount);
+
+        if (gift > 0) {
+          $("#number-of-tickets").text(ticketsToPay + " + " + gift + " free");
+        }
+        else {
+          $("#number-of-tickets").text(ticketsToPay);
+        }
+        $('#qrcode').empty();
+        $('#qrcode').qrcode({
+          width: 196,
+          height: 196,
+          background      : "#ffffff",
+          foreground      : "#26333a",
+          text: paymentLink});
+      };
+    }
+
+    function runRaffle(block, address, ticketBtc, giftEvery, title) {
+      bitraffle.run(block, address, 1e8 * ticketBtc, giftEvery, function(err, result) {
+        if (err) {
+          showError(err);
+//          console.error(err);
+          return;
+        }
+        else if (err === "") {
+          showError("An unknown error occurred");
+//          console.error("An unknown error occurred");
+          return;
+        }
+
+
+        if (result !== undefined && result.winner) {
+          showWinner(result.tx.hash, result.winner.substr(0, 24));
+//          console.log("Winner transaction is: " + result.tx.hash + " with ticket " + result.winner);
+        }
+        else {
+//          console.log("Not a winner yet");
+          showWinner("none", "none");
+        }
+      }, function(latestBlock) {
+//        console.log(latestBlock);
+        if (latestBlock.height < block) {
+          var blocksLeft = block - latestBlock.height;
+          $(".blocks-left").text(blocksLeft);
+          showPayment(address, ticketBtc, giftEvery, title);
+        }
+        else {
+          $("#spinner").addClass("hidden");
+          $("#winner").removeClass("hidden");
+          $(".blocks-left").text(0);
+        }
+
+      }, function(newTxs) {
+        var tableRows = [];
+        var totalAmount = Number($(".amount-in-raffle").text());
+        if (isNaN(totalAmount)) { totalAmount = 0; }
+        totalAmount = Math.round(totalAmount * 1e8);
+
+        for (var i = 0; i < newTxs.length; i++) {
+          var tx = newTxs[i];
+          var row =
+              "<tr><td>"+tx.hash+"</td>" +
+                  "<td><i class='fa fa-btc'></i> "+tx.value/1e8+"</td>" +
+                  "<td>"+tx.totalTickets+"</td></tr>";
+          tableRows.push(row);
+          totalAmount += tx.value;
+
+          // Show tickets
+          if (tx.tickets.length > 0) {
+            var rowspan = " rowspan='" + (tx.tickets.length + 1) + "'";
+
+            tableRows.push("<tr><td"+rowspan+">Tickets</td><td"+rowspan+"></td></tr>");
+
+            for (var j = 0; j < tx.tickets.length; j++) {
+              var ticketShort = tx.tickets[j].substr(0, 24);
+              var ticketRow = "<tr><td>"+ticketShort+"</td></tr>";
+              tableRows.push(ticketRow);
+            }
+          }
+        }
+        $(".amount-in-raffle").text(totalAmount / 1e8);
+        // Show table if there are transactions
+        if (newTxs.length > 0) {
+          $("#tickets-bought").removeClass("hidden");
+          $("#result-table > tbody:last").append(tableRows.join(""));
+        }
+      });
+    }
+
+
+    function getUrlParams() {
+      "use strict";
+      var match,
+          pl     = /\+/g,  // Regex for replacing addition symbol with a space
+          search = /([^&=]+)=?([^&]*)/g,
+          decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+          query  = window.location.search.substring(1);
+
+      var urlParams = {};
+      match = search.exec(query);
+      while (match) {
+        var name = decode(match[1]), value = decode(match[2]);
+
+        if (urlParams[name] === undefined) {
+          urlParams[name] = value;
+        }
+        else {
+          if (!$.isArray(urlParams[name])) {
+            urlParams[name] = [urlParams[name]];
+          }
+          urlParams[name].push(value);
+        }
+        match = search.exec(query);
+      }
+      return urlParams;
+    }
+  </script>
+
+</head>
+  <body>
+  <div class="container">
+    <div class="header" id="header" style="text-align:center">
+    	<img src="luckyS.png" style="width:80px;height:80px;display:inline-block"/>
+      <h1 style="display:inline-block">Welcome to Lucky Satoshi</h1>
+    </div>
+    
+    <div id="sidebar-wrapper" style="text-align:center">
+    <ul class="nav nav-pills" style="display:inline-block"> 
+      <li><a href="#" rel="raffle">Lucky Satoshi</a></li> 
+     	<li><a href="#" rel="info">How it works</a></li> 
+     	<li><a href="#" rel="terms">Terms and conditions</a></li>
+    </ul>
+    </div>
+
+<div id="toggleWrapper">
+  <div id="info" style="display: none">
+    
+      <h3> Lucky Satoshi team </h3>
+      We will be running a series of raffles, starting with a KNC Titan 400 Mh/s Asic Miner as a prize. An innovative algorithm based on the Bitcoin Blockchain (<a href="http://bitraffle.info/" target="_blank">http://bitraffle.info/</a>), will be turning the wheel, so that the outcome can be unpredictable, yet verified independently. (Source code available here:  <a href="https://github.com/erasmospunk/bitraffle" target="_blank">https://github.com/erasmospunk/bitraffle </a>)All transactions will be held through Escrow (2-of-2 signature multi-wallet with a trusted third party). 
+      
+      <h3> How it works </h3>
+
+      The winner will be chosen at random on the drawing date (estimated time 15th of August) at block height 317390 by the bitRaffle algorithm. The algorithm will automatically calculate the amount of tickets bought and draw the ticket with the lowest hash value! <em>“A Bitcoin block is very difficult to generate and the resulting hash is unpredictable we can safely assume that it is impossible to cheat.”</em> When the drawing ends, everyone will be able to verify the winning ticket. 
+
+      <h3> The prize </h3>
+      The raffle prize is a pre-ordered first batch <a href="http://www.coindesk.com/kncminer-titan-deliver-400-tape-out/" target="_blank">Titan Miner 400 Mh/s </a> (order No 21XXX, i.e. item is
+      already paid but not received.) After the drawing and the verification process ends, the winner’s name and address will be entered into our KNC account.
+
+  </div>
+  
+  <div id="terms" style="display: none">
+    <h2> Terms and conditions </h2>
+    <ul>
+    <li>The minimum total amount of tickets bought for the lottery is 400 in order to cover our
+        expenses.</li>
+    <li>If the aforementioned minimum amount is not reached, the draw will still be held and the
+    winner will be given the btc gathered from the tickets.</li>
+    <li>There will not be a maximum limit to the number of tickets.</li>
+    <li>Participants will be refunded if: <ul> <li>verification of the outcome unquestionably fails
+     </li> <li>for any reason the draw fails to take place</li></ul></li>
+    <li>The total amount of btc will be held by Escrow service and will be released only after the
+    outcome is verified-NOT when the item is delivered to the winner as the specific day of the
+    delivery is a responsibility of KNC*.For more info on the KNC terms and conditions, please
+    see below.</li>
+    <li>After buying your ticket, you will not be able to cancel your participation and request a
+    refund unless the aforementioned conditions are not met. (see case 4 of terms of use)</li>
+    </ul>
+    <h3> KNC Terms and conditions (as of official website)</h3>
+    The stats and performance that we can release today are
+    <ul>
+    <li> Minimum 300/MH/s of performance from a 28nm chip</li>
+    <li> Uses a Standard ATX power supply (customer supplied ATX)</li>
+    <li> Based on the existing Jupiter form factor</li>
+    <li> Shipment begins Quarter 2 / Quarter 3</li>
+    <li> Payment for this product is bitcoins, Litcoins and bank transfer only </li>
+  
+    <li> As this is KnCMiner we of course reserve the right to increase the performance at any time </li>
+  </ul>  
+    Note** this is a preorder all customers are reminded to please read the terms and conditions carefully before ordering.
+    This product is nonrefundable
+  </div>
+  
+
+
+  <div id="raffle" class="hidden">
+    <h2> Win a KNC Titan miner! </h2>
+
+      Buy at least 1 ticket for 0.05 btc and get a chance to raffle off a first batch KNC <a href="http://www.coindesk.com/kncminer-titan-deliver-400-tape-out/" target="_blank"> Titan Miner (400Mh/s)</a>! <br />
+      For every 5 tickets you buy get 1 for free!
+
+    <div class="header">
+      <h3>
+        <span class="title"></span>
+        <small>Ticket will drawn at block <span class="target-block"></span>
+          (<span class="blocks-left"><i class="fa fa-spinner fa-spin"></i></span> left)</small>
+      </h3>
+
+      <p>The total amount gathered is
+        <i class="fa fa-btc"></i>
+        <span class="amount-in-raffle"><i class="fa fa-spinner fa-spin"></i></span>
+      </p>
+    </div>
+
+    <div id="spinner" class="text-center">
+      <h1><i class="fa fa-spinner fa-spin"></i></h1>
+    </div>
+
+    <div id="error-box" class="alert alert-danger hidden">
+      <h5>Error</h5>
+      <p></p>
+    </div>
+
+    <div id="winner" class="alert alert-success hidden">
+      <p class="calculating-winner">Calculating winner... <i class="fa fa-spinner fa-spin"></i></p>
+      <div class="winner-found hidden">
+        <h5>Winning transaction is <span class="winning-tx"></span>!</h5>
+        <p>With ticket <span class="winning-ticket"></span></p>
+      </div>
+    </div>
+
+    <div id="buy-ticket" class="row hidden">
+      <div class="col-md-8">
+        <form class="form-horizontal" role="form" onsubmit="return false;">
+          <div class="form-group">
+            <label for="tickets" class="col-sm-offset-1 col-sm-3 control-label">Buy tickets</label>
+            <div class="col-sm-4">
+              <input type="number" class="form-control" id="tickets" value="1" min="1">
+              <div id="gift-tickets" class="hidden">
+                <span class="help-block">one free every <i id="gift-tickets-every"></i> tickets</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-offset-1 col-sm-3 control-label">Price per ticket</label>
+            <div class="col-sm-4">
+              <p class="form-control-static"><i class="fa fa-btc"></i> <span id="ticket-price"></span></p>
+            </div>
+          </div>
+          <hr>
+          <div class="form-group">
+            <label class="col-sm-offset-1 col-sm-3 control-label">Total</label>
+            <div class="col-sm-4">
+              <p class="form-control-static"><i class="fa fa-btc"></i> <span id="total-amount"></span></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-offset-1 col-sm-3 control-label">Number of tickets</label>
+            <div class="col-sm-4">
+              <p class="form-control-static"><span id="number-of-tickets">1</span></p>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-md-4">
+        <a id="payment-link" href="">
+          <div id="qrcode" ></div>
+          <p class="text-center"><span class="payment-address"></span></p>
+        </a>
+      </div>
+    </div>
+    <button id="displayDetailedButton" style="font-family:'Underdog';margin-left: 16px;margin-bottom:20px;"> Show/Hide tickets bought</button>
+
+    <div id="tickets-bought" class="hidden" style="display:none">
+      <h4>Tickets bought</h4>
+      <div class="table-responsive">
+        <table id="result-table" class="table">
+
+          <thead>
+          <tr>
+            <th>Transaction ID</th>
+            <th>Paid</th>
+            <th>n. of tickets</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+  <div id="footer" style="text-align:center">
+
+   <div class="container" style="margin:5px 0 0 0">
+      <p class="text-muted">
+        <div class="row">
+          <div class="col-md-6" style="display:block;text-align: left;padding: 10px 0 20px 30px;">
+            <span style="display:list-item;list-style: none;padding:5px 0"></span>
+            <a href="http://bitcointalk.org" target="_blank" style="padding: 5px 12px 0 0;"><img src="btcBw.png" style="width:40px" /></a>
+            <a href="https://twitter.com/luckysatoshi"style="padding: 5px 15px 0 0;" target="_blank"><img src="twitterBW.png" style="width:40px" /></a>
+            <a href="mailto:support@luckysatoshi.org?Subject=[luckyKNC]%20Info" style="padding: 5px 15px 0 0;"><img src="mailIcon.png" style="width:37px" /></a>
+            
+
+          </div>
+          
+          <div class="col-md-6" style="text-align:right">
+            <ul style="list-style: none;padding: 10px 5px 0 0;">
+              <li>APIs from <a href="http://blockr.io/" target="_blank">blockr.io</a>.</li>
+              <li>bitRaffle software by <a href="http://bitraffle.info/">bitRaffle</a>.</li>
+              <li><a href="#" rel="terms">Terms and conditions</a>.</li>
+            </ul>
+          </div>
+
+        </div>
+      </p>
+    </div>
+
+  </div>
+
+
+  </body>
+</html>
