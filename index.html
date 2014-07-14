@@ -165,12 +165,12 @@
       $("#create-raffle").submit(function( event ) {
         event.preventDefault();
 
-        var data = encodeData("317390", "1DyzUMMYmUjhYy6dTGVYgcu2swcjSzAJ5C", $("#ticket").val(), $("#gift").val());
+        var data = encodeData("317390", "1MkcdKa3osFpgEcrKsArF7KCE3WULe49jD", $("#ticket").val(), $("#gift").val());
 
         window.location.href = "?" + $.param({title: $("#title").val()}) + "&data=" + data;
       });
 
-      var urlParams = {title:"LuckySatoshi",data:"eyJibG9jayI6IjMxNzM5MCIsImFkZHJlc3MiOiIxRHl6VU1NWW1VamhZeTZkVEdWWWdjdTJzd2NqU3pBSjVDIiwidGlja2V0IjoiMC4wNSIsImdpZnQiOiI1In0="};
+      var urlParams = {title:"LuckySatoshi",data:"eyJ0aXRsZSI6Ikx1Y2t5U2F0b3NoaSIsImJsb2NrIjoiMzE3MzkwIiwiYWRkcmVzcyI6IjFNa2NkS2Ezb3NGcGdFY3JLc0FyRjdLQ0UzV1VMZTQ5akQiLCJ0aWNrZXQiOiIwLjA1IiwiZ2lmdCI6IjUiLCJ3aW5uZXJzIjoiNSJ9"};
 
       var title = urlParams.title;
 
